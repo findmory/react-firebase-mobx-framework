@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { observer } from "mobx-react";
 
 import Firebase from "./Firebase";
+
+import ClubStore from "./ClubStore";
 import "./App.css";
 
 export default observer(
@@ -9,34 +11,33 @@ export default observer(
     constructor(props) {
       super(props);
 
-      this.state = {
-        clubs: null,
-      };
+      this.fb = new Firebase();
+      this.clubStore = new ClubStore();
     }
 
     componentDidMount() {
-      // get a firebase ref
-      let fb = new Firebase();
-
       // listen to changes in the 'clubs' ref
-      fb.clubs().on("value", (snapshot) => {
-        let snapObj = snapshot.val();
-
-        // convert the object to an array for list display
-        this.setState({
-          clubs: Object.keys(snapObj || {}).map((key) => ({
-            ...snapObj[key],
-            uid: key,
-          })),
-        });
+      // and set mobx store `clubs` with the firebase clubs object
+      console.log(this.fb);
+      this.fb.clubs().on("value", (snapshot) => {
+        this.clubStore.setClubs(snapshot.val());
       });
     }
 
-    render() {
-      console.log(this.state.clubs);
+    componentWillUnmount() {
+      this.fb.clubs().off();
+    }
 
-      let list = this.state.clubs
-        ? this.state.clubs.map((club) => <li key={club.uid}>{club.name}</li>)
+    render() {
+      if (!this.fb) {
+        return null;
+      }
+
+      const clubList = this.clubStore.clubList;
+      console.log(clubList);
+
+      let list = clubList
+        ? clubList.map((club) => <li key={club.uid}>{club.name}</li>)
         : null;
       return (
         <>
