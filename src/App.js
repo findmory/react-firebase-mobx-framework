@@ -10,26 +10,33 @@ export default observer(
       super(props);
 
       this.state = {
-        users: null,
+        clubs: null,
       };
     }
 
     componentDidMount() {
+      // get a firebase ref
       let fb = new Firebase();
+
+      // listen to changes in the 'clubs' ref
       fb.clubs().on("value", (snapshot) => {
-        console.log(snapshot.val());
+        let snapObj = snapshot.val();
+
+        // convert the object to an array for list display
         this.setState({
-          users: snapshot.val(),
+          clubs: Object.keys(snapObj || {}).map((key) => ({
+            ...snapObj[key],
+            uid: key,
+          })),
         });
       });
     }
 
     render() {
-      let list = this.state.users
-        ? Object.entries(this.state.users).map((item) => {
-            console.log(item);
-            return <li key={item[0]}>{item[1].name}</li>;
-          })
+      console.log(this.state.clubs);
+
+      let list = this.state.clubs
+        ? this.state.clubs.map((club) => <li key={club.uid}>{club.name}</li>)
         : null;
       return (
         <>
