@@ -11,10 +11,15 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 class Firebase {
-  constructor() {
+  constructor(rootStore) {
     app.initializeApp(config);
 
     this.db = app.database();
+
+    // if he needs access to any other store
+    // it's available on this.rootStore.<other_store>
+    this.rootStore = rootStore;
+    console.log(this.rootStore);
   }
 
   // *** User API ***

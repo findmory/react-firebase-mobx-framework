@@ -8,5 +8,5 @@ class RootStore {
   }
 }
 
-const rootStore = new RootStore();
-export default rootStore;
+//const rootStore = new RootStore();
+export default RootStore;
