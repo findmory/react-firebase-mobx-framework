@@ -7,6 +7,9 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "mobx-react";
 import RootStore from "./stores";
 
+// Provide instantiated RootStore as stores
+// now we can inject 'stores' to any component
+// and they have access to all/any stores on this.props.stores.<storename>
 ReactDOM.render(
   <Provider stores={new RootStore()}>
     <App />
