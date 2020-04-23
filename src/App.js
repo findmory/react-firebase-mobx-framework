@@ -8,7 +8,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // deconstruct the stores for convienence
+    // dereference the stores for convienence
     const { clubStore, firebaseStore } = props.stores;
     this.clubStore = clubStore;
     this.firebaseStore = firebaseStore;
